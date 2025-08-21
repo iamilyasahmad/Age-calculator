@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Free Online Age Calculator – Accurate DOB Age Tool</title>
+  <meta name="description" content="Free age calculator tool to find your exact age in years, months, and days. Enter your birth date and get instant results. Mobile-friendly and easy to use.">
+  <meta name="keywords" content="Age Calculator, Calculate Age, Birthday Tool, DOB, How Old Am I, Online Age Finder">
+  <meta name="author" content="Your Name or Brand">
+
+  <!-- Open Graph for Social Sharing -->
+  <meta property="og:title" content="Free Online Age Calculator – Calculate Exact Age">
+  <meta property="og:description" content="Enter your birth date and calculate your exact age in years, months, and days.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourwebsite.com/age-calculator">
+  <meta property="og:image" content="https://yourwebsite.com/assets/age-calc-preview.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Online Age Calculator">
+  <meta name="twitter:description" content="Calculate your exact age from birth date.">
+  <meta name="twitter:image" content="https://yourwebsite.com/assets/age-calc-preview.png">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 500px;
+      width: 100%;
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #0072ff;
+    }
+
+    p {
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+
+    label {
+      display: block;
+      margin-top: 1.2rem;
+      font-weight: 600;
+    }
+
+    input[type="date"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 0.9rem;
+      width: 100%;
+      background: #0072ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #0059d4;
+    }
+
+    #result, #errorMsg {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    #result {
+      font-weight: 600;
+      color: #28a745;
+    }
+
+    #errorMsg {
+      color: #dc3545;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" itemscope itemtype="https://schema.org/WebApplication">
+    <meta itemprop="name" content="Age Calculator" />
+    <meta itemprop="applicationCategory" content="Utility" />
+    <meta itemprop="operatingSystem" content="All" />
+    <meta itemprop="url" content="https://yourwebsite.com/age-calculator" />
+
+    <h1>Age Calculator</h1>
+    <p>Calculate your exact age in years, months, and days from your birth date.</p>
+
+    <form id="ageForm" aria-label="Age Calculator Form">
+      <label for="birthDate">Enter Your Birth Date:</label>
+      <input type="date" id="birthDate" name="birthDate" required aria-required="true" max="" />
+
+      <label for="calcDate">Calculate Age At (Optional):</label>
+      <input type="date" id="calcDate" name="calcDate" max="" />
+
+      <button type="submit" aria-label="Calculate exact age">Calculate Age</button>
+
+      <div id="errorMsg" role="alert" aria-live="assertive"></div>
+      <div id="result" aria-live="polite"></div>
+    </form>
+  </main>
+
+  <script>
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById("birthDate").max = today;
+    document.getElementById("calcDate").max = today;
+
+    document.getElementById("ageForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const birthDateInput = document.getElementById("birthDate").value;
+      const calcDateInput = document.getElementById("calcDate").value;
+      const errorMsg = document.getElementById("errorMsg");
+      const result = document.getElementById("result");
+
+      errorMsg.textContent = "";
+      result.textContent = "";
+
+      if (!birthDateInput) {
+        errorMsg.textContent = "Please enter your birth date.";
+        return;
+      }
+
+      const birthDate = new Date(birthDateInput);
+      const calcDate = calcDateInput ? new Date(calcDateInput) : new Date();
+
+      if (birthDate > calcDate) {
+        errorMsg.textContent = "Birth date cannot be in the future.";
+        return;
+      }
+
+      let years = calcDate.getFullYear() - birthDate.getFullYear();
+      let months = calcDate.getMonth() - birthDate.getMonth();
+      let days = calcDate.getDate() - birthDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(calcDate.getFullYear(), calcDate.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      result.textContent = `Your exact age is ${years} year(s), ${months} month(s), and ${days} day(s).`;
+    });
+  </script>
+</body>
+</html>
+
